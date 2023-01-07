@@ -1,6 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<html
+  lang="en"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+>
   <head>
     <meta charset="ISO-8859-1" />
     <title>Sign Up</title>
@@ -17,7 +20,7 @@ xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
         <h1>User Registration - Sign Up</h1>
       </div>
       <form
-        th:action="@{/process_register}"
+        th:action="@{/signup/proccess}"
         th:object="${user}"
         method="post"
         style="max-width: 600px; margin: 0 auto"
@@ -28,7 +31,7 @@ xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
             <div class="col-8">
               <input
                 type="email"
-                th:field="*{userMail}"
+                th:field="*{userEmail}"
                 class="form-control"
                 required
               />
@@ -40,57 +43,58 @@ xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
               <div class="col-8">
                 <input
                   type="text"
-                  th:field="*{userName}"
+                  th:field="*{username}"
                   class="form-control"
                   required
                 />
               </div>
             </div>
 
-          <div class="form-group row">
-            <label class="col-4 col-form-label">Password: </label>
-            <div class="col-8">
-              <input
-                type="password"
-                th:field="*{userPassword}"
-                class="form-control"
-                required
-                minlength="6"
-                maxlength="10"
-              />
+            <div class="form-group row">
+              <label class="col-4 col-form-label">Password: </label>
+              <div class="col-8">
+                <input
+                  type="password"
+                  th:field="*{userPassword}"
+                  class="form-control"
+                  required
+                  minlength="6"
+                  maxlength="10"
+                />
+              </div>
             </div>
-          </div>
 
-          <div class="form-group row">
-            <label class="col-4 col-form-label">First Name: </label>
-            <div class="col-8">
-              <input
-                type="text"
-                th:field="*{userFirstName}"
-                class="form-control"
-                required
-                minlength="2"
-                maxlength="20"
-              />
+            <div class="form-group row">
+              <label class="col-4 col-form-label">First Name: </label>
+              <div class="col-8">
+                <input
+                  type="text"
+                  th:field="*{userFirstname}"
+                  class="form-control"
+                  required
+                  minlength="2"
+                  maxlength="20"
+                />
+              </div>
             </div>
-          </div>
 
-          <div class="form-group row">
-            <label class="col-4 col-form-label">Last Name: </label>
-            <div class="col-8">
-              <input
-                type="text"
-                th:field="*{userLastName}"
-                class="form-control"
-                required
-                minlength="2"
-                maxlength="20"
-              />
+            <div class="form-group row">
+              <label class="col-4 col-form-label">Last Name: </label>
+              <div class="col-8">
+                <input
+                  type="text"
+                  th:field="*{userLastname}"
+                  class="form-control"
+                  required
+                  minlength="2"
+                  maxlength="20"
+                />
+              </div>
             </div>
-          </div>
 
-          <div>
-            <button type="submit" class="btn btn-primary">Sign Up</button>
+            <div>
+              <button type="submit" class="btn btn-primary">Sign Up</button>
+            </div>
           </div>
         </div>
       </form>

@@ -45,7 +45,7 @@ public class ApplicationConfig extends WebSecurityConfigurerAdapter {
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http.csrf().disable().authorizeRequests()
-        .antMatchers("/", "/signup").permitAll().and().authorizeRequests().antMatchers("/**")
+        .antMatchers("/", "/signup", "/signup/proccess").permitAll().and().authorizeRequests().antMatchers("/**")
         .hasRole("USER")
         .and()
         .formLogin()
