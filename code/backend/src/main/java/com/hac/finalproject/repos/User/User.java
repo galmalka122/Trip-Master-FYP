@@ -1,21 +1,22 @@
 package com.hac.finalproject.repos.User;
 
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
-import com.hac.finalproject.repos.roles.Role;
+// import org.springframework.security.core.GrantedAuthority;
+// import org.springframework.security.core.authority.AuthorityUtils;
+// import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User /* implements UserDetails */ {
 
   /**
    * 
@@ -45,7 +46,7 @@ public class User {
    * 
    */
   @Column(unique = true, nullable = false)
-  private String userEmail;
+  private String email;
 
   /**
    * 
@@ -53,7 +54,7 @@ public class User {
    * 
    */
   @Column(nullable = false)
-  private String userPassword;
+  private String password;
 
   /**
    * 
@@ -61,7 +62,7 @@ public class User {
    * 
    */
   @Column(nullable = false)
-  private String userFirstname;
+  private String firstname;
 
   /**
    * 
@@ -69,32 +70,70 @@ public class User {
    * 
    */
   @Column(nullable = false)
-  private String userLastname;
+  private String lastname;
 
   /**
    * 
    * A no-arg constructor for the User class.
    */
+
+  @Column(nullable = false)
+  private boolean enabled = true;
+  @Column(nullable = false)
+  private boolean accountNonExpired = true;
+  @Column(nullable = false)
+  private boolean credentialsNonExpired = true;
+  @Column(nullable = false)
+  private boolean accountNonLocked = true;
+
+  // @ElementCollection(fetch = FetchType.EAGER)
+  // List<GrantedAuthority> authorities =
+  // AuthorityUtils.createAuthorityList("ROLE_USER");
+
   public User() {
   }
 
   /**
-   * 
-   * A constructor for the User class that takes all of its fields as arguments.
-   * 
-   * @param username      the username of the user
-   * @param userEmail     the email address of the user
-   * @param userPassword  the password of the user
-   * @param userFirstname the first name of the user
-   * @param userLastname  the last name of the user
+   * A custom implementation of the User class for Spring Security.
+   * This class is used to represent a user in the system and holds additional
+   * user information.
+   *
+   * @param username              the username of the user.
+   * @param userEmail             the email of the user.
+   * @param userPassword          the encoded password of the user.
+   * @param userFirstname         the first name of the user.
+   * @param userLastname          the last name of the user.
+   * @param enabled               a boolean indicating whether the user is enabled
+   *                              or not.
+   * @param accountNonExpired     a boolean indicating whether the user account is
+   *                              expired or not.
+   * @param credentialsNonExpired a boolean indicating whether the user
+   *                              credentials are expired or not.
+   * @param accountNonLocked      a boolean indicating whether the user account is
+   *                              locked or not.
+   * @param authorities           a list of authorities (roles) that the user has.
    */
   public User(String username, String userEmail, String userPassword, String userFirstname, String userLastname) {
     this.username = username;
-    this.userEmail = userEmail;
-    this.userPassword = userPassword;
-    this.userFirstname = userFirstname;
-    this.userLastname = userLastname;
+    this.email = userEmail;
+    this.password = userPassword;
+    this.firstname = userFirstname;
+    this.lastname = userLastname;
   }
+
+  // public User(String username, String password, boolean enabled, boolean
+  // accountNonExpired,
+  // boolean credentialsNonExpired, boolean accountNonLocked,
+  // List<GrantedAuthority> authorities) {
+  // this.username = username;
+  // this.password = password;
+  // this.enabled = enabled;
+  // this.accountNonExpired = accountNonExpired;
+  // this.credentialsNonExpired = credentialsNonExpired;
+  // this.accountNonLocked = accountNonLocked;
+  // this.authorities = authorities;
+
+  // }
 
   /**
    * 
@@ -106,16 +145,55 @@ public class User {
     return username;
   }
 
+  public boolean isEnabled() {
+    return enabled;
+  }
+
+  public void setEnabled(boolean enabled) {
+    this.enabled = enabled;
+  }
+
+  public boolean isAccountNonExpired() {
+    return accountNonExpired;
+  }
+
+  public void setAccountNonExpired(boolean accountNonExpired) {
+    this.accountNonExpired = accountNonExpired;
+  }
+
+  public boolean isCredentialsNonExpired() {
+    return credentialsNonExpired;
+  }
+
+  public void setCredentialsNonExpired(boolean credentialsNonExpired) {
+    this.credentialsNonExpired = credentialsNonExpired;
+  }
+
+  public boolean isAccountNonLocked() {
+    return accountNonLocked;
+  }
+
+  public void setAccountNonLocked(boolean accountNonLocked) {
+    this.accountNonLocked = accountNonLocked;
+  }
+
+  // public List<GrantedAuthority> getAuthorities() {
+  // return authorities;
+  // }
+
+  // public void setAuthorities(List<GrantedAuthority> authorities) {
+  // this.authorities = authorities;
+  // }
+
   /**
    * 
    * This method retrieves the roles of a user.
    * 
    * @return Set<Role> - a set of roles that the user belongs to.
-   * 
-   *         public Set<Role> getRoles() {
-   *         return roles;
-   *         }
    */
+  // public List<GrantedAuthority> getRoles() {
+  // return this.authorities;
+  // }
 
   /**
    * 
@@ -133,18 +211,18 @@ public class User {
    * 
    * @return String - the email of the user.
    */
-  public String getUserEmail() {
-    return userEmail;
+  public String getEmail() {
+    return email;
   }
 
   /**
    * 
    * This method sets the email of a user.
    * 
-   * @param userEmail - the new email for the user.
+   * @param email - the new email for the user.
    */
-  public void setUserEmail(String userEmail) {
-    this.userEmail = userEmail;
+  public void setEmail(String email) {
+    this.email = email;
   }
 
   /**
@@ -153,18 +231,18 @@ public class User {
    * 
    * @return String - the password of the user.
    */
-  public String getUserPassword() {
-    return userPassword;
+  public String getPassword() {
+    return password;
   }
 
   /**
    * 
    * This method sets the password of a user.
    * 
-   * @param userPassword - the new password for the user.
+   * @param password - the new password for the user.
    */
-  public void setUserPassword(String userPassword) {
-    this.userPassword = userPassword;
+  public void setPassword(String password) {
+    this.password = password;
   }
 
   /**
@@ -173,18 +251,18 @@ public class User {
    * 
    * @return String - the first name of the user.
    */
-  public String getUserFirstname() {
-    return userFirstname;
+  public String getFirstname() {
+    return firstname;
   }
 
   /**
    * 
    * This method sets the first name of a user.
    * 
-   * @param userFirstname - the new first name for the user.
+   * @param firstname - the new first name for the user.
    */
-  public void setUserFirstname(String userFirstname) {
-    this.userFirstname = userFirstname;
+  public void setFirstname(String firstname) {
+    this.firstname = firstname;
   }
 
   /**
@@ -193,18 +271,18 @@ public class User {
    * 
    * @return String - the last name of the user.
    */
-  public String getUserLastname() {
-    return userLastname;
+  public String getLastname() {
+    return lastname;
   }
 
   /**
    * 
    * This method sets the last name of a user.
    * 
-   * @param userLastname - the new last name for the user.
+   * @param lastname - the new last name for the user.
    */
-  public void setUserLastname(String userLastname) {
-    this.userLastname = userLastname;
+  public void setLastname(String lastname) {
+    this.lastname = lastname;
   }
 
 }

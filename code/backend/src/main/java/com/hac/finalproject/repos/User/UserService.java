@@ -20,15 +20,15 @@ public class UserService {
     return userRepository.findById(id).orElse(null);
   }
 
+  public User getUserByUserName(String username) {
+    return userRepository.findByUsername(username);
+  }
+
   public void signup(User user) {
     if (userRepository.existsByUsername(user.getUsername())) {
       throw new IllegalArgumentException("Username is already taken: " + user.getUsername());
     }
     userRepository.save(user);
-  }
-
-  public User createUser(User user) {
-    return userRepository.save(user);
   }
 
   public User updateUser(Long id, User updatedUser) {
@@ -37,7 +37,7 @@ public class UserService {
       return null;
     }
     user.setUsername(updatedUser.getUsername());
-    user.setUserEmail(updatedUser.getUserEmail());
+    user.setEmail(updatedUser.getEmail());
     return userRepository.save(user);
   }
 

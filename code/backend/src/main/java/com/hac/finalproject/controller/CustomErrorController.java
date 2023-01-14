@@ -15,4 +15,9 @@ public class CustomErrorController implements ErrorController {
     return "error";
   }
 
+  @RequestMapping("/403")
+  public String noAuth(HttpServletRequest request, Model model) {
+    return "403";
+  }
+
 }

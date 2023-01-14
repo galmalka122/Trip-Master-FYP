@@ -1,0 +1,13 @@
+
+code/backend/src/main/frontend/node/node.exe
+code/backend/src/main/frontend/node/yarn/dist/bin/yarn
+code/backend/src/main/frontend/node/yarn/dist/bin/yarn.cmd
+code/backend/src/main/frontend/node/yarn/dist/bin/yarn.js
+code/backend/src/main/frontend/node/yarn/dist/bin/yarnpkg
+code/backend/src/main/frontend/node/yarn/dist/bin/yarnpkg.cmd
+code/backend/src/main/frontend/node/yarn/dist/lib/cli.js
+code/backend/src/main/frontend/node/yarn/dist/lib/v8-compile-cache.js
+code/backend/src/main/frontend/node/yarn/dist/LICENSE
+code/backend/src/main/frontend/node/yarn/dist/package.json
+code/backend/src/main/frontend/node/yarn/dist/preinstall.js
+code/backend/src/main/frontend/node/yarn/dist/README.md
