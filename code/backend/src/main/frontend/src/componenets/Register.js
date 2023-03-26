@@ -92,14 +92,55 @@ const Register = (props) => {
     message: "Email already in use",
   };
 
-  const onSubmit = async (data) => {
+  const usernameError = {
+    registerTo: "username",
+    type: "custom",
+    message: "Username already in use",
+  };
+
+  const confirmedPasswordError = {
+    registerTo: "confirmedPassword",
+    type: "custom",
+    message: "Password and password confirmation must match",
+  };
+
+  const onSubmit = (data) => {
+    if (data.confirmedPassword !== data.password) {
+      methods.setError(confirmedPasswordError.registerTo, {
+        type: confirmedPasswordError.type,
+        message: confirmedPasswordError.message,
+      });
+      return;
+    }
     delete data.confirmedPassword;
-    console.log(JSON.stringify(data));
-    const res = await axios.post("/api/user/create", JSON.stringify(data));
-    setshowRegisteredSuccessfully(true);
-    setTimeout(() => {
-      Router.push("/");
-    }, 2000);
+    axios
+      .post("/api/user/create", data)
+      .then((res) => {
+        setshowRegisteredSuccessfully(true);
+        setTimeout(() => {
+          Router.push("/");
+        }, 2000);
+      })
+      .catch((err) => {
+        const txt = err.response.data;
+        const type = txt.split(" ")[0].toLowerCase();
+        console.log(type);
+        switch (type) {
+          case "email":
+            methods.setError(emailError.registerTo, {
+              type: emailError.type,
+              message: emailError.message,
+            });
+            break;
+          case "username":
+            methods.setError(usernameError.registerTo, {
+              type: usernameError.type,
+              message: usernameError.message,
+            });
+            break;
+          default:
+        }
+      });
   };
 
   return (

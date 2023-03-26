@@ -1,31 +1,68 @@
 package com.hac.finalproject;
 
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.filter.CorsFilter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-@Configuration
-public class WebConfig implements WebMvcConfigurer {
-
-  @Override
-  public void addResourceHandlers(ResourceHandlerRegistry registry) {
-    registry.addResourceHandler("/**")
-        .addResourceLocations("classpath:/public/");
-  }
+public class WebConfig implements Filter, WebMvcConfigurer {
 
   @Bean
-  public CorsFilter corsFilter() {
-    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-    CorsConfiguration config = new CorsConfiguration();
-    config.setAllowCredentials(true);
-    config.addAllowedOrigin("https://maps.googleapis.com");
-    config.addAllowedHeader("*");
-    config.addAllowedMethod("*");
-    source.registerCorsConfiguration("/**", config);
-    return new CorsFilter(source);
+  public PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
   }
+
+  @Override
+  public void addResourceHandlers(final ResourceHandlerRegistry registry) {
+    registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
+  }
+
+  @Override
+  public void addCorsMappings(CorsRegistry registry) {
+    registry.addMapping("/**").allowedOrigins("http://localhost:3000");
+  }
+
+  @Override
+  public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) {
+    HttpServletResponse response = (HttpServletResponse) res;
+    HttpServletRequest request = (HttpServletRequest) req;
+    System.out.println("WebConfig; " + request.getRequestURI());
+    response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+    response.setHeader("Access-Control-Allow-Methods", "POST, PUT, GET, OPTIONS, DELETE");
+    response.setHeader("Access-Control-Allow-Headers",
+        "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With,observe");
+    response.setHeader("Access-Control-Max-Age", "3600");
+    response.setHeader("Access-Control-Allow-Credentials", "true");
+    response.setHeader("Access-Control-Expose-Headers", "Authorization");
+    response.addHeader("Access-Control-Expose-Headers", "responseType");
+    response.addHeader("Access-Control-Expose-Headers", "observe");
+    System.out.println("Request Method: " + request.getMethod());
+    if (!(request.getMethod().equalsIgnoreCase("OPTIONS"))) {
+      try {
+        chain.doFilter(req, res);
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    } else {
+      response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+      response.setHeader("Access-Control-Allow-Methods", "POST,GET,DELETE,PUT");
+      response.setHeader("Access-Control-Max-Age", "3600");
+      response.setHeader("Access-Control-Allow-Headers", "Access-Control-Expose-Headers"
+          + "Authorization, content-type," +
+          "USERID" + "ROLE" +
+          "access-control-request-headers,access-control-request-method,accept,origin,authorization,x-requested-with,responseType,observe");
+      response.setStatus(HttpServletResponse.SC_OK);
+    }
+
+  }
+
 }

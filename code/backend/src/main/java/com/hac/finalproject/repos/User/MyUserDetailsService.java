@@ -1,11 +1,5 @@
 package com.hac.finalproject.repos.User;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.List;
-
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +16,6 @@ public class MyUserDetailsService /* implements UserDetailsService */ {
 
     @Autowired
     private DataSource dataSource;
-
     // @Autowired
     // private PasswordEncoder passwordEncoder;
 

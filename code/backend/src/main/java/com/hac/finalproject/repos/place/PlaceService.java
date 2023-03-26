@@ -28,7 +28,7 @@ public class PlaceService {
     place.setAltitude(updatedPlace.getAltitude());
     place.setClosingHour(updatedPlace.getClosingHour());
     place.setLongitude(updatedPlace.getLongitude());
-    place.setOpenHour(updatedPlace.getOpenHour());
+    place.setOpeningHour(updatedPlace.getOpeningHour());
     place.setIndex(updatedPlace.getIndex());
     place.setName(updatedPlace.getName());
     place.setRate(updatedPlace.getRate());

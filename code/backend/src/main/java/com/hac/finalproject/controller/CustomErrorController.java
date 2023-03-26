@@ -12,12 +12,12 @@ public class CustomErrorController implements ErrorController {
 
   @RequestMapping("/error")
   public String handleError(HttpServletRequest request, Model model) {
-    return "error";
+    return "error.html";
   }
 
   @RequestMapping("/403")
   public String noAuth(HttpServletRequest request, Model model) {
-    return "403";
+    return "403.html";
   }
 
 }

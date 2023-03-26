@@ -26,7 +26,7 @@ public class Place implements WeightFunction {
   private Double altitude;
 
   @Column()
-  private LocalTime openHour;
+  private LocalTime openingHour;
 
   @Column()
   private LocalTime closingHour;
@@ -48,7 +48,7 @@ public class Place implements WeightFunction {
     this.name = name;
     this.longitude = longitude;
     this.altitude = altitude;
-    this.openHour = openHour;
+    this.openingHour = openHour;
     this.closingHour = closingHour;
     this.index = index;
     this.rate = rate;
@@ -79,12 +79,12 @@ public class Place implements WeightFunction {
     this.altitude = altitude;
   }
 
-  public LocalTime getOpenHour() {
-    return openHour;
+  public LocalTime getOpeningHour() {
+    return openingHour;
   }
 
-  public void setOpenHour(LocalTime openHour) {
-    this.openHour = openHour;
+  public void setOpeningHour(LocalTime openingHour) {
+    this.openingHour = openingHour;
   }
 
   public LocalTime getClosingHour() {
@@ -121,7 +121,6 @@ public class Place implements WeightFunction {
 
   @Override
   public double calculateWeight(Place currentPlace, Place nextPlace) {
-    // TODO Auto-generated method stub
     return 0;
   }
 

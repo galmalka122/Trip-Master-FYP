@@ -26,7 +26,11 @@ public class UserService {
 
   public void signup(User user) {
     if (userRepository.existsByUsername(user.getUsername())) {
-      throw new IllegalArgumentException("Username is already taken: " + user.getUsername());
+      throw new IllegalArgumentException("Username is already been taken: " + user.getUsername());
+    }
+
+    if (userRepository.existsByEmail(user.getEmail())) {
+      throw new IllegalArgumentException("Email is already been taken: " + user.getEmail());
     }
     userRepository.save(user);
   }
@@ -39,6 +43,12 @@ public class UserService {
     user.setUsername(updatedUser.getUsername());
     user.setEmail(updatedUser.getEmail());
     return userRepository.save(user);
+  }
+
+  public User findByUsernameAndPassword(String username, String password) {
+
+    return userRepository.findByUsernameAndPassword(username, password);
+
   }
 
   public void deleteUser(Long id) {
