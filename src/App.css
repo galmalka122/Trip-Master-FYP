@@ -12,6 +12,26 @@
     animation: App-logo-spin infinite 20s linear;
   }
 }
+.map-container {
+  height: 60vh;
+  width: 100%
+}
+
+.star {
+  display: inline-block;
+  position: relative;
+}
+
+.star:after {
+  font-family: FontAwesome;
+  content: attr(data-fill);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 23%;
+  overflow: hidden;
+  color: black;
+}
 
 .App-header {
   background-color: #282c34;
