@@ -1,0 +1,171 @@
+.App {
+  text-align: center;
+}
+
+.page-loader-show {
+  opacity: 1;
+}
+.carousel-container {
+  display: -webkit-inline-flex;
+  width: 500px; /* Set a fixed width */
+  height: 300px; /* Set a fixed height */
+}
+
+.uniform-image {
+  width: 500px; /* Set the desired width */
+  height: 300px; /* Set the desired height */
+  object-fit: cover; /* Adjust how the image fills its container */
+}
+
+.image{
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.15);
+}
+.page-loader__spinner {
+  position: relative;
+  width: 100px;
+  height: 100px;
+}
+
+#map {
+  height: 60vh;
+  width: 100%
+}
+
+.icon {
+  color: #ffb526;
+}
+.tada {
+  -webkit-animation-name: tada;
+  animation-name: tada;
+}
+
+.animated {
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
+.fa {
+  display: inline-block;
+  font: normal normal normal 14px/1 FontAwesome;
+  font-size: inherit;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spinner{
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.opacity-blur{
+  opacity: 0.2
+}
+
+.opacity-none{
+  opacity: 0
+}
+
+.panel-image{
+  height: 60vh;
+  width: 100%;
+}
+
+.p-autocomplete-panel::-webkit-scrollbar {
+  display: none;
+}
+.p-autocomplete-panel {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+.pac-item{
+  cursor:default;
+  padding:0 4px;
+  -o-text-overflow:ellipsis;
+  text-overflow:ellipsis;
+  overflow:hidden;
+  white-space:nowrap;
+  line-height:30px;
+  text-align:left;
+  border-top:1px solid #e6e6e6;
+  font-size:11px;
+  color:#515151
+}
+.pac-item:hover{
+  background-color:#fafafa
+}
+.pac-item-selected,.pac-item-selected:hover{
+  background-color:#ebf2fe
+}
+.pac-matched{
+  font-weight:700
+}
+.pac-item-query{
+  font-size:13px;
+  padding-right:3px;
+  color:#000
+}
+.pac-icon{
+  width:15px;
+  height:20px;
+  margin-right:7px;
+  margin-top:6px;
+  display:inline-block;
+  vertical-align:top;
+  background-image:url(https://maps.gstatic.com/mapfiles/api-3/images/autocomplete-icons.png);
+  -webkit-background-size:34px 34px;
+  -moz-background-size:34px;
+  background-size:34px
+}
+.hdpi .pac-icon{
+  background-image:url(https://maps.gstatic.com/mapfiles/api-3/images/autocomplete-icons_hdpi.png)
+}
+.pac-icon-search{
+  background-position:-1px -1px
+}
+.pac-item-selected .pac-icon-search{
+  background-position:-18px -1px
+}
+.pac-icon-marker{
+  background-position:-1px -161px
+}
+.pac-item-selected .pac-icon-marker{
+  background-position:-18px -161px
+}
+.pac-placeholder{
+  color:gray
+}
+.pac-target-input:-webkit-autofill{
+  -webkit-animation-name:beginBrowserAutofill;
+  animation-name:beginBrowserAutofill
+}
+.pac-target-input:not(:-webkit-autofill){
+  -webkit-animation-name:endBrowserAutofill;
+  animation-name:endBrowserAutofill
+}
