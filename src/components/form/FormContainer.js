@@ -1,21 +1,23 @@
 import React from 'react';
 import FormHeader from "./FormHeader";
+import FormBackground from "./FormBackground";
 
-function FormContainer(props) {
-    const formInputs = props.inputs;
-
-
+/**
+ * Component that renders a form container with a header, inputs, buttons, and an image.
+ *
+ * @param {string} title - The ID of the form container.
+ * @param {string} image - The title of the form header.
+ * @param {JSX.Element} children - The alert message to be displayed if there is an error in the form.
+ * @returns {JSX.Element} - A form container component.
+ */
+function FormContainer({ children, title, image }) {
     return (
         <div className="container-fluid">
             <div className="row mh-100vh">
-                <FormHeader title={props.title} id={props.id}>
-                    {props.inputs}
-                    {props.buttons}
-                    {props.optionals}
+                <FormHeader formTitle={title}>
+                    {children}
                 </FormHeader>
-                <div id="bg-block" className="col-lg-6 d-flex align-items-end"
-                     style={`background-image: url('${props.image}');background-size: cover;background-position: center center;`}>
-                </div>
+                {image && (<FormBackground imageUrl={image}/> )}
             </div>
         </div>
     );

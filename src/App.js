@@ -1,25 +1,24 @@
+import React from "react";
 import './App.css';
-import Button from "./components/Navbar/Button";
-import Navlink from "./components/Navbar/Navlink";
-import NavBar from "./components/Navbar/Navbar";
-import MapContainer from "./components/map/MapContainer";
-function App() {
-    const buttons = [
-        <Button link={"/signup"} text={"Sign up"} key={1}/>,
-        <Button link={"/login"} text={"Login"} key={2}/>,
-    ]
-    const links = [
-        <Navlink link={"/"} text={"Home"} key={3}/>,
-        <Navlink link={"/places"} text={"Attractions"} key={4}/>,
-        <Navlink link={"/trips"} text={"Your trips"} key={5}/>,
-    ]
-  return (
-    <div className="App">
+import {BrowserRouter as Router} from "react-router-dom";
+import 'bootstrap/dist/css/bootstrap.css';
+import AppRoutes from "./components/routes/AppRoutes";
+import Navigation from "./components/routes/Navigation";
+import {useState} from "react";
+import {useLoadScript} from "@react-google-maps/api";
 
-        <NavBar links={links} buttons={buttons}/>
-        <MapContainer/>
-    </div>
-  );
+function App() {
+    const [ libraries ] = useState(['places', 'routes']);
+    const { isLoaded } = useLoadScript({
+        googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
+        libraries,
+        version: "beta",
+    });
+
+    return isLoaded && (<Router>
+            <Navigation />
+            <AppRoutes />
+        </Router>)
 }
 
 export default App;
