@@ -5,11 +5,13 @@ import {GoogleMap} from "@react-google-maps/api";
 import NearbySearchResults from "../NewMap1";
 import {Dialog} from "primereact/dialog";
 import {fetchDetails} from "./placeDetailsUtils";
+import api from "../../core/api/tripAPI";
 import PlaceDetailContainer from "./PlaceDetailContainer";
 
 function MapContainer() {
     const { selectedTrip } = useTripContext();
     const { country, city, starting_date, ending_date, lat, lng } = selectedTrip;
+    const {trip_id, country, city, starting_date, ending_date, lat, lng } = selectedTrip;
     const [map,setMap] = useState(null);
     const [selectedPlace,setSelectedPlace] = useState(null);
     const [center,setCenter] = useState({lat, lng});
@@ -21,17 +23,22 @@ function MapContainer() {
 
     const onPlaceClick = async (place)=> {
         setSelectedPlace(place);
+    }
 
+    const onSavePlace = async (details) => {
+        await api.addPlace(`${trip_id}`, details)
     }
 
     const onPlaceHide = () => {
         setVisible(false)
         setSelectedPlace(null)
     }
-
     const header = (<div className="flex justify-content-center">
         Plan your trip
     </div>);
+    const header = <div className="flex justify-content-center">
+        Plan your trip
+    </div>;
     return (
         <>
             <Panel header={header} className="h-full">
@@ -60,7 +67,7 @@ function MapContainer() {
                 </div>
             </Panel>
             <Dialog header={country} visible={visible} style={{ width: '50vw' }} onHide={onPlaceHide}>
-                <PlaceDetailContainer place={selectedPlace} map={map}/>)
+                <PlaceDetailContainer place={selectedPlace} key={selectedPlace?.place_id} onSave={onSavePlace}/>
             </Dialog>
         </>
     )

@@ -1,4 +1,5 @@
 import {parseDaysHours, formatPlaceType, ND_MARKER_ICONS_BY_TYPE, createPrompt} from "./utils"
+import {getDetails} from "use-places-autocomplete";
 import openAi from "../../core/api/openaiApi";
 /** Number of POIs to show on widget load. */
 const ND_NUM_PLACES_INITIAL = 5;
@@ -79,26 +80,23 @@ const PlaceDetailsFields = ['name', 'rating', 'formatted_address', 'website', 'o
 
 
 
-export const fetchDetails = async (details, map) => {
+export const fetchDetails = async (details) => {
     try {
         let newDetails = {...details}
         let request = {
             placeId: details.place_id,
             fields: PlaceDetailsFields
         };
-        const prompt = createPrompt('brief overview', details)
 
-        const service = await new window.google.maps.places.PlacesService(map);
-        await service.getDetails(request, (res, status) => {
-            if (status === window.google.maps.places.PlacesServiceStatus.OK) {
-                const place = processResult(res);
-                newDetails = {...newDetails, ...place}
-            }
-        });
+        const prompt = createPrompt('brief overview up to 30 words', details)
 
+        const d = await getDetails(request);
+        newDetails = {...newDetails, ...d}
         const {data} = await openAi.post("https://api.openai.com/v1/completions", {...prompt});
         const overviewText = data.choices[0].text;
-        return {...newDetails, overview: overviewText}
+        newDetails = {...newDetails, overview: overviewText}
+        console.log(newDetails);
+        return newDetails
     }
     catch (e) {
         console.log(e)

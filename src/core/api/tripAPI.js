@@ -50,12 +50,23 @@ const tripAPI = (api) => {
         }
     }
 
+    const addPlace = async (tripId, place) => {
+        try {
+            const {data} = await api.post(`trips/${tripId}`, place);
+            return data;
+        }
+        catch (e){
+            throw e.data;
+        }
+    }
+
     return {
         getTrips,
         getTrip,
         saveTrip,
         addTrip,
-        deleteTrip
+        deleteTrip,
+        addPlace
     }
 
 }
