@@ -52,7 +52,7 @@ const tripAPI = (api) => {
 
     const addPlace = async (tripId, place) => {
         try {
-            const {data} = await api.post(`trips/${tripId}`, place);
+            const {data} = await api.post(`trips/${tripId}/places`, place);
             return data;
         }
         catch (e){

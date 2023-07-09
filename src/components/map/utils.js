@@ -24,8 +24,10 @@ export function parseDaysHours(openingHours) {
 }
 
 export function createPrompt(what, place){
-    prompt = `find ${what} for the place called ${place.name},${place?.formatted_address ? " in the address " + place.formatted_address : ""} with the geoLocation ` +
-        `{latitude: ${place.coords.lat}, longitude: ${place.coords.lng}}`
+    let prompt = `find ${what} for a ${place?.types?.length > 0 ? place.types[0].string : "place"} called ${place.name},`
+        + `${place?.formatted_address ? " in the address " + place.formatted_address : ""} with the geoLocation ` +
+        `{latitude: ${place.coords.lat}, longitude: ${place.coords.lng}}. avoid using the geoLocation in the response.`
+        + `if you dont find anything, just say "no results".`;
     let data = {
         model: "text-davinci-003",
         prompt: prompt,

@@ -8,11 +8,9 @@ import "primereact/resources/primereact.css";
 import 'primeflex/primeflex.css';
 import 'primeicons/primeicons.css';
 
-
-
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-    <Providers>
-        <App/>
-    </Providers>
+        <Providers>
+            <App/>
+        </Providers>
 );

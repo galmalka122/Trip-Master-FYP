@@ -20,6 +20,12 @@ code {
   background: var(--bs-primary);
 }
 
+
+div.p-sidebar-mask {
+  position: absolute !important;
+}
+
+
  .mr-1 {
    margin-right: 0.25rem !important;
  }
@@ -40,4 +46,24 @@ code {
 
 #map {
   height: 100%;
+}
+div.p-button.p-component{
+ padding: 0.94rem
+}
+
+.p-sidebar-content, .p-dialog-content, .p-multiselect-items-wrapper {
+  overflow-y: auto;
+
+  /* hide scrollbar for IE, Edge and Firefox */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* hide scrollbar for chrome, safari and opera */
+.p-sidebar-content::-webkit-scrollbar, .p-dialog-content::-webkit-scrollbar , .p-multiselect-items-wrapper::-webkit-scrollbar{
+  display: none;
+}
+
+.p-sidebar-content p, .p-dialog-content, .p-multiselect-items-wrapper  {
+  color: #fff;
 }

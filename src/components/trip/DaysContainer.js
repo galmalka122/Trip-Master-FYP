@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React from 'react';
 import TripDay from "./TripDay";
 import {DataView} from "primereact/dataview";
 import {useNavigate} from "react-router-dom";
@@ -11,7 +11,7 @@ const DaysContainer = ({tripDays, lat, lng}) => {
         if (!day) {
             return;
         }
-        return <TripDay day={day} onClick={() => navigate("/members/search")}/>;
+        return <TripDay day={day} onClick={() => navigate("/members/search",{state:{day: day}})}/>;
     };
 
     return (

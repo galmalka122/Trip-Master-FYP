@@ -27,4 +27,13 @@ export const axiosTripAdvisor = axios.create({
 
 })
 
+export const axiosFourSquare = axios.create({
+    baseURL: 'https://api.foursquare.com/',
+    headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+    },
+
+})
+
 export default baseAPI;

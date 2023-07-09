@@ -89,6 +89,15 @@ export const TripProvider = ({ children }) => {
         }
     }
 
+    const addPlaceHandler = async (tripId, place) => {
+        try {
+            const addedPlace = await api.addPlace(tripId, place);
+            toast.showSuccess(addedPlace.name, 'Successfully added');
+        } catch (e) {
+            toast.showError(e);
+        }
+    }
+
     const selectTrip = async (trip) => {
         setSelectedTrip(trip);
     }
@@ -103,6 +112,7 @@ export const TripProvider = ({ children }) => {
         deleteTripHandler,
         selectTrip,
         selectedTrip,
+        addPlaceHandler
     };
 
     // Render the context provider with the provided value

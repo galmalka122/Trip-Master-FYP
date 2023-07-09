@@ -12,24 +12,11 @@ const TripImage = ({ country, city, latitude, longitude }) => {
 
     const fetchImages = async ()=>{
         const query = city ?? country;
-        const images = await getLocationPhoto(query, latitude, longitude);
+        const images = await api.getLocationPhoto(query, latitude, longitude);
         setImageSrc(images);
     }
 
-    const getLocationPhoto = async (query, lat, lng) => {
-        try {
-            //const id = await api.getLocationId(query, lat, lng);
-            //const photos = await api.getLocationPhoto(id);
-            //console.log(photos);
-            //setImageSrc(photos);
-        }
-        catch (e) {
-            console.log(e);
-        }
-
-    }
-    return imageSrc && (<Image src={imageSrc[0]} alt="Image" fluid rounded />)
-    ;
+    return imageSrc && (<Image src={imageSrc[0]} alt="Image" fluid rounded />);
 };
 
 export default TripImage;

@@ -2,15 +2,22 @@ import React, {useEffect, useState} from 'react';
 import {Panel} from "primereact/panel";
 import useTripContext from "../../core/hooks/useTripContext";
 import {GoogleMap} from "@react-google-maps/api";
-import NearbySearchResults from "../NewMap1";
 import {Dialog} from "primereact/dialog";
-import {fetchDetails} from "./placeDetailsUtils";
 import api from "../../core/api/tripAPI";
-import PlaceDetailContainer from "./PlaceDetailContainer";
+import {Button} from "primereact/button";
+import {useLocation} from "react-router-dom";
+import {useNavigate} from "react-router";
+import {daysString} from "../trip/utils";
+import NearBySearchContainer from "../nearbySearch/NearBySearchContainer";
+import PlaceDetailContainer from "../place-details/PlaceDetailContainer";
+import useToast from "../../core/hooks/useToast";
 
-function MapContainer() {
-    const { selectedTrip } = useTripContext();
-    const { country, city, starting_date, ending_date, lat, lng } = selectedTrip;
+function MapContainer({ route, navigation }) {
+    const location = useLocation();
+    const navigate = useNavigate();
+    const toast = useToast();
+    const { selectedTrip, addPlaceHandler } = useTripContext();
+    const {day} = location.state;
     const {trip_id, country, city, starting_date, ending_date, lat, lng } = selectedTrip;
     const [map,setMap] = useState(null);
     const [selectedPlace,setSelectedPlace] = useState(null);
@@ -20,33 +27,40 @@ function MapContainer() {
     useEffect(()=>{
         selectedPlace && setVisible(true);
     },[selectedPlace])
-
     const onPlaceClick = async (place)=> {
         setSelectedPlace(place);
     }
 
     const onSavePlace = async (details) => {
-        await api.addPlace(`${trip_id}`, details)
+        details.date = day.datetime;
+        try {
+            const place = await addPlaceHandler(trip_id, details);
+            toast.showSuccess("Place " + place.name + " added successfully");
+        }
+        catch (e) {
+            console.log(e);
+        }
+
     }
 
     const onPlaceHide = () => {
         setVisible(false)
         setSelectedPlace(null)
     }
-    const header = (<div className="flex justify-content-center">
-        Plan your trip
-    </div>);
     const header = <div className="flex justify-content-center">
         Plan your trip
     </div>;
     return (
         <>
             <Panel header={header} className="h-full">
+
+                <Button title="Go back" onClick={() => navigate(-1)} />
                 <div className="grid h-100">
-                    <div className="col-8 h-auto" >
+                    <div className="col-12 h-auto" >
                         <GoogleMap
                             center={center}
                             zoom={15}
+                            mapContainerClassName={"map-container"}
                             mapContainerStyle={{ height: '80vh', width:"100%" }}
                             options={{
                                 zoomControl: true,
@@ -55,19 +69,19 @@ function MapContainer() {
                                 fullscreenControl: true,
                                 gestureHandling: 'greedy'
                             }}
-                            onLoad={map => {
-                                setMap(map)
+                            onLoad={async map => {
+                                await setMap(map)
                             }
                             }
-                        >
+                        >{map && <NearBySearchContainer lat={center.lat} lng={center.lng} map={map} setCenter={setCenter} viewDetails={onPlaceClick}/>}
                         </GoogleMap></div>
                     <div className="col">
-                        {map && <NearbySearchResults lat={center.lat} lng={center.lng} mapRef={map} setCenter={setCenter} viewDetails={onPlaceClick}/>}
+
                     </div>
                 </div>
             </Panel>
             <Dialog header={country} visible={visible} style={{ width: '50vw' }} onHide={onPlaceHide}>
-                <PlaceDetailContainer place={selectedPlace} key={selectedPlace?.place_id} onSave={onSavePlace}/>
+                <PlaceDetailContainer place={selectedPlace} day={daysString[day.day]} key={selectedPlace?.place_id} onSavePlace={onSavePlace}/>
             </Dialog>
         </>
     )

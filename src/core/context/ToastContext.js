@@ -1,4 +1,4 @@
-import React, {createContext, useEffect, useRef} from 'react';
+import React, {createContext, useRef} from 'react';
 import {Toast} from "primereact/toast";
 export const ToastContext = createContext();
 

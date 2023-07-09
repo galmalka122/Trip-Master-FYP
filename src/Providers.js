@@ -3,7 +3,6 @@ import {LoadingProvider} from "./core/context/LoadingContext";
 import {ToastProvider} from "./core/context/ToastContext";
 import {AuthProvider} from "./core/context/AuthContext";
 import {TripProvider} from "./core/context/TripContext";
-import {PlaceProvider} from "./core/context/PlaceContext";
 
 const Providers = ({children}) => {
     return (
@@ -11,9 +10,7 @@ const Providers = ({children}) => {
             <ToastProvider>
                 <AuthProvider>
                     <TripProvider>
-                        <PlaceProvider>
-                            {children}
-                        </PlaceProvider>
+                        {children}
                     </TripProvider>
                 </AuthProvider>
             </ToastProvider>

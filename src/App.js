@@ -6,19 +6,23 @@ import AppRoutes from "./components/routes/AppRoutes";
 import Navigation from "./components/routes/Navigation";
 import {useState} from "react";
 import {useLoadScript} from "@react-google-maps/api";
+import { PrimeReactProvider } from 'primereact/api';
 
-function App() {
+
+function App({ Component, pageProps }) {
     const [ libraries ] = useState(['places', 'routes']);
     const { isLoaded } = useLoadScript({
         googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
         libraries,
-        version: "beta",
     });
 
-    return isLoaded && (<Router>
-            <Navigation />
-            <AppRoutes />
-        </Router>)
+    return isLoaded && (
+        <PrimeReactProvider>
+            <Router>
+                <Navigation />
+                <AppRoutes {...pageProps}/>
+            </Router>
+        </PrimeReactProvider>)
 }
 
 export default App;

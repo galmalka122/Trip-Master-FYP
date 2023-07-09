@@ -1,5 +1,4 @@
-import React, {useEffect, useState} from 'react';
-import { Dropdown } from "primereact";
+import React, { useState} from 'react';
 import { Country, City } from 'country-state-city';
 import { InputText } from 'primereact/inputtext';
 import { Controller, useForm } from 'react-hook-form';
@@ -20,11 +19,6 @@ function NewTripForm(props) {
     const [minDate, setMinDate] = useState(new Date());
     const errors = form.formState.errors;
     const [visible, setVisible] = useState(false);
-    const wa = form.watch("country")
-    useEffect(()=>{
-        console.log(wa);
-    },[wa])
-    let counter = 0
     const search = (event, data, setData) => {
 
             let _filteredEntries;

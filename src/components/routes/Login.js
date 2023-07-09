@@ -57,7 +57,7 @@ function Login() {
                 <Controller
                     name="email"
                     control={control}
-                    rules={{ required:"Please enter your email." }}
+                    rules={{ required: "Please enter your email." }}
                     render={({ field, fieldState }) => (
                         <InputText
                             id={field.name}

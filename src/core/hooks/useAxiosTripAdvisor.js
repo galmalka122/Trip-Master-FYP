@@ -22,10 +22,13 @@ function useAxiosTripAdvisor() {
             throw e;
         }
     }
-    const getLocationPhoto = async (locationId) => {
+    const getLocationPhoto = async (query, lat, lng) => {
         try {
-            const {data} = await axiosTripAdvisor.get(`location/${locationId}/photos?`);
-            return data?.data?.map(photo=> {return photo?.images?.original?.url});
+            const id = await getLocationId(query, lat, lng);
+            const {data} = await axiosTripAdvisor.get(`location/${id}/photos?`);
+            const images = data?.data?.map(photo=> {return photo?.images?.original?.url});
+            console.log(images);
+            return images;
         }
         catch (e) {
             throw e;

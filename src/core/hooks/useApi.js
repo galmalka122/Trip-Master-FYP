@@ -1,5 +1,6 @@
 import {membersAPI} from "../api/baseAPI";
 
+
 const useApi = (refreshTokenHandler, auth) => {
 
     membersAPI.interceptors.request.use(
@@ -14,7 +15,7 @@ const useApi = (refreshTokenHandler, auth) => {
     membersAPI.interceptors.response.use(
             response => response,
             async (error) => {
-                console.log("onREject")
+                console.log(error.config)
                 const prevRequest = error?.config;
                 if (error?.response?.status === 403 && !prevRequest?.sent) {
                     prevRequest.sent = true;

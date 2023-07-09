@@ -31,6 +31,7 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         if(!auth?.accessToken && persist) refreshTokenHandler();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     useEffect(()=>{

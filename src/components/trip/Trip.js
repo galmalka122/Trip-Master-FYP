@@ -4,11 +4,14 @@ import TripImage from "./TripImage";
 import useTripContext from "../../core/hooks/useTripContext";
 import { Panel } from 'primereact/panel';
 import DaysContainer from "./DaysContainer";
-import {calculateRemainingDays, fetchWeather, getAllDays} from "./utils";
+import {calculateRemainingDays, fetchWeather} from "./utils";
+import {fetchAiOverview} from "../place-details/placeDetailsUtils";
 
 const Trip = () => {
-    const {  selectedTrip } = useTripContext();
+    const { selectedTrip } = useTripContext();
+    console.log(selectedTrip);
     const [days, setDays] = useState(JSON.parse(localStorage.getItem(`${selectedTrip.name}-weather`)) || []);
+    const [overview, setOverview] = useState(JSON.parse(localStorage.getItem(`${selectedTrip.name}-overview`)) || "");
     const { country, city, starting_date, ending_date, lat, lng } = selectedTrip;
     const str = city ? `${city}, ${country}` : `${country}`
     useEffect(()=> {
@@ -28,7 +31,21 @@ const Trip = () => {
 
         }
         days.length > 0 || weather();
+        // eslint-disable-next-line
     },[days])
+
+   useEffect(()=> {
+        console.log(selectedTrip);
+        const fetchOverview = async () => {
+            const overview = await fetchAiOverview(selectedTrip,false);
+            localStorage.setItem(`${selectedTrip.name}-overview`, JSON.stringify(overview))
+            console.log(overview);
+            setOverview(overview)
+
+        }
+        overview !== "" || fetchOverview();
+        // eslint-disable-next-line
+    },[overview])
 
     const onDayClick = () => {
 
@@ -80,10 +97,9 @@ const Trip = () => {
                         </p>
                     </Row>
                     <Row>
-                        <p className="m-0">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae
-                            numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate neque quas!
-                        </p>
+                        {overview && <p className="m-0">
+                            {overview}
+                        </p>}
                     </Row>
                 </Col>
             </Row>

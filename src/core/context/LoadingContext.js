@@ -1,4 +1,4 @@
-import React, {createContext, useEffect, useRef, useState} from 'react';
+import React, {createContext, useState} from 'react';
 import {ProgressSpinner} from "primereact/progressspinner";
 
 const LoadingContext = createContext();

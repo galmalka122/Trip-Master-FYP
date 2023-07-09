@@ -16,7 +16,6 @@ import useTripContext from "../../core/hooks/useTripContext";
 export default function TripList() {
     const {trips, addTripHandler, selectTrip, deleteTripHandler} = useTripContext();
     const navigate = useNavigate();
-    console.log(trips)
     const handleSubmit = async (tripData) => {
         await addTripHandler(tripData);
     }
