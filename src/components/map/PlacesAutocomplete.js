@@ -103,6 +103,7 @@ const PlacesAutocomplete = ({ setSelected }) => {
                 suggestions={data}
                 completeMethod={()=>{return data}}
                 itemTemplate={itemTemplate}
+
                  />
     );
 };

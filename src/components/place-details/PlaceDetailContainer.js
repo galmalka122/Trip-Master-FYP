@@ -9,14 +9,13 @@ import PlaceRating from "./PlaceRating";
 
 
 function PlaceDetailContainer({place, onSavePlace, day}) {
-
     const chips = (types) => {
         return <div>
-            {types.map((type) => <Chip icon={type.icon} className="m-2" label={type.string} key={type.string}/> )}
+            {types.map((type) => <Chip image={type.icon} className="m-2" label={type.string} key={type.string}/> )}
         </div>
     }
 
-    return <Card key={place?.coords?.lat} className="flex text-center hide-overflow">
+    return <Card key={place?.latitude} className="flex text-center hide-overflow">
             <Card.Header as="h5">{place?.name}</Card.Header>
             <Card.Body >
                 {place?.photos?.length > 0 && <PlaceGallery images={place?.photos}/>}
@@ -30,8 +29,7 @@ function PlaceDetailContainer({place, onSavePlace, day}) {
                     {place?.openingHours && <OpeningHours hours={place?.openingHours} tripDay={day}/>}
                     <Link href={place?.website} isExternal>{place?.website}</Link>
                     {place?.types?.length > 0 && chips(place.types) }
-                    <Divider/>
-                    <Button variant="primary" onClick={async()=> await onSavePlace(place)}>Add</Button>
+                    {onSavePlace && <><Divider/> <Button disabled={place?.day_index !== undefined} variant="primary" onClick={async()=> await onSavePlace(place)}>Add</Button></>}
                 </div>
             </Card.Body>
         </Card>

@@ -22,7 +22,7 @@ export const axiosTripAdvisor = axios.create({
     baseURL: 'https://api.content.tripadvisor.com/api/v1/',
     headers: {
         "Content-Type": "application/json",
-        "Accept": "application/json"
+        Accept: "application/json"
     },
 
 })

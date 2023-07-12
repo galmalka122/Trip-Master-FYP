@@ -60,13 +60,41 @@ const tripAPI = (api) => {
         }
     }
 
+    const removePlace = async (tripId, placeId, placeIndex) => {
+        try {
+            const body = {
+                placeId: placeId,
+                placeIndex: placeIndex
+            }
+            const {data} = await api.delete(`trips/${tripId}/places`,{data: body});
+            return data;
+        }
+        catch (e){
+            throw e.data;
+        }
+    }
+
+    const calculateRoute = async (tripId, dayIndex) => {
+        try{
+            const {data} = await api.get(`trips/${tripId}/${dayIndex}/calculate`);
+            return data;
+        }
+        catch (e){
+            throw e.data; 
+        }
+    }
+
+
+
     return {
         getTrips,
         getTrip,
         saveTrip,
         addTrip,
         deleteTrip,
-        addPlace
+        addPlace,
+        removePlace,
+        calculateRoute
     }
 
 }

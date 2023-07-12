@@ -4,48 +4,34 @@ import {Column} from "primereact/column";
 
 const OpeningHours = ({hours, tripDay}) => {
 
-    const [days, setDays] = useState([]);
-    useEffect(
-        () => {
-            const data = Object.entries(hours).map(([key, value])=> {
-                let day = {};
-                day.day = key;
-                hours = value.split('–');
-                day.opening = hours[0];
-                day.closing = hours[1];
-                return day;
-            })
-            setDays(data);
-        }, [hours]
-    )
 
     const dayTemplate = (day) => {
         return <span className={day.day === tripDay ? `font-bold` : ""}>{day.day}</span>;
     };
 
     const openingHoursTemplate = (day) => {
-        return <span className={day.day === tripDay ? `font-bold` : ""}>{day.opening}</span>;
+        return <span className={day.day === tripDay ? `font-bold` : ""}>{day.open}</span>;
     };
 
     const closingHoursTemplate = (day) => {
-        return <span className={day.day === tripDay ? `font-bold` : ""}>{day.closing}</span>;
+        return <span className={day.day === tripDay ? `font-bold` : ""}>{day.close}</span>;
     };
 
 
 
     return (
         <div>
-            <DataTable value={days} showGridlines={false} size="small" >
+            {hours && hours?.length > 0 ? <DataTable value={hours} showGridlines={false} size="small" >
                 <Column field="day"
                         body={dayTemplate}>
                 </Column>
-                <Column field="opening"
+                <Column field="open"
                         body={openingHoursTemplate}>
                 </Column>
-                <Column field="closing"
+                <Column field="close"
                         body={closingHoursTemplate}>
                 </Column>
-            </DataTable>
+            </DataTable> : "No opening hours available"}
         </div>
     );
 };

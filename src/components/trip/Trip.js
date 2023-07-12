@@ -5,47 +5,33 @@ import useTripContext from "../../core/hooks/useTripContext";
 import { Panel } from 'primereact/panel';
 import DaysContainer from "./DaysContainer";
 import {calculateRemainingDays, fetchWeather} from "./utils";
-import {fetchAiOverview} from "../place-details/placeDetailsUtils";
 
 const Trip = () => {
     const { selectedTrip } = useTripContext();
     console.log(selectedTrip);
-    const [days, setDays] = useState(JSON.parse(localStorage.getItem(`${selectedTrip.name}-weather`)) || []);
-    const [overview, setOverview] = useState(JSON.parse(localStorage.getItem(`${selectedTrip.name}-overview`)) || "");
-    const { country, city, starting_date, ending_date, lat, lng } = selectedTrip;
+    const [days, setDays] = useState(JSON.parse(localStorage.getItem(`${selectedTrip.trip_id}-weather`)) || []);
+    const { trip_id,country, city, starting_date, ending_date, latitude, longitude, overview } = selectedTrip;
     const str = city ? `${city}, ${country}` : `${country}`
     useEffect(()=> {
         const weather = async () => {
-            const res = await fetchWeather(lat, lng, starting_date, ending_date);
-            const newDays = res?.days.map(el=>{
+            const res = await fetchWeather( latitude, longitude, starting_date, ending_date);
+            const newDays = res?.days.map((el, index)=>{
                 const curDate = new Date(el.datetime);
                 return {
                     ...el,
                     day: curDate.getDay(),
                     datetime: curDate.toLocaleDateString(),
-                    icon: `/assets/img/weather/${el.icon}.PNG`
+                    icon: `/assets/img/weather/${el.icon}.PNG`,
+                    index: index,
                 }
             })
-            localStorage.setItem(`${selectedTrip.name}-weather`, JSON.stringify(newDays))
+            localStorage.setItem(`${selectedTrip.trip_id}-weather`, JSON.stringify(newDays))
             setDays(newDays)
 
         }
         days.length > 0 || weather();
         // eslint-disable-next-line
     },[days])
-
-   useEffect(()=> {
-        console.log(selectedTrip);
-        const fetchOverview = async () => {
-            const overview = await fetchAiOverview(selectedTrip,false);
-            localStorage.setItem(`${selectedTrip.name}-overview`, JSON.stringify(overview))
-            console.log(overview);
-            setOverview(overview)
-
-        }
-        overview !== "" || fetchOverview();
-        // eslint-disable-next-line
-    },[overview])
 
     const onDayClick = () => {
 
@@ -58,7 +44,7 @@ const Trip = () => {
         }}>
             <Row>
                 <Col >
-                    <TripImage country={country} city={city} latitude={lat} longitude={lng}/>
+                    <TripImage tripId={trip_id} country={country} city={city} latitude={latitude} longitude={longitude}/>
                 </Col>
                 <Col>
                     <Row>
@@ -103,7 +89,7 @@ const Trip = () => {
                     </Row>
                 </Col>
             </Row>
-            {days.length > 0 &&(<DaysContainer tripDays={days} lat={lat} lng={lng}/>)}
+            {days.length > 0 &&(<DaysContainer tripDays={days} lat={latitude} lng={longitude}/>)}
         </Panel>
         </main>
     );

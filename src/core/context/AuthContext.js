@@ -19,6 +19,7 @@ export const AuthProvider = ({ children }) => {
         try{
             newAuth = await api.refreshToken();
             onAuthChange(newAuth);
+            return newAuth.accessToken;
         }
         catch(e){
             loading.off();

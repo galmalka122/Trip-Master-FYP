@@ -8,7 +8,7 @@ export const fetchAiOverview = async (details, place=true) => {
         console.log(details)
         if (!place){
             newDetails = {
-                coords: {lat: details.lat, lng: details.lng},
+                coords: {lat: details.latitude, lng: details.longitude},
                 name: details?.city ? `${details?.city}, ${details.country}` : details.country,
             }
         }

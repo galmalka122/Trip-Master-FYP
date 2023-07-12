@@ -4,9 +4,9 @@ import {formatPlaceType, ND_MARKER_ICONS_BY_TYPE, parseDaysHours} from "../map/u
 const processResult = async (result, place) => {
     // Basic details.
     if (result.name && !place.name) place.name = result.name;
-    if (result.geometry && !place.coords) place.coords = {lat:result.geometry.location.lat(),lng:result.geometry.location.lng()};
+    if (result.geometry && !place.latitude) {place.latitude = result.geometry.location.lat();place.longitude = result.geometry.location.lng()};
     if (result.formatted_address && !place.address) place.address = result.formatted_address;
-    if (result.photos && !place.photos) {
+    if (result.photos && (!place?.photos || !(place?.photos?.length > result?.photos?.length))) {
         place.photos = result.photos.map((photo) => ({
             urlSmall: photo.getUrl({maxWidth: 200, maxHeight: 200}),
             urlLarge: photo.getUrl({maxWidth: 1200, maxHeight: 1200}),
@@ -23,7 +23,6 @@ const processResult = async (result, place) => {
         }
     }
     if (result.url && !place.url) place.url = result.url;
-    place.place_id = result.place_id
     // Contact details.
     if (result.website && !place.website) place.website = result.website;
     if (result.formatted_phone_number && !place.phoneNumber) place.phoneNumber = result.formatted_phone_number;
@@ -32,7 +31,7 @@ const processResult = async (result, place) => {
     if (result.price_level && !place.priceLevel) place.priceLevel = result.price_level;
     if (result.user_ratings_total && !place.numRatings) place.numRatings = result.user_ratings_total;
     if (result.reviews && !place.reviews) place.reviews = result.reviews;
-    if (result.editorial_summary !== undefined && !place.overview) {place.overview = result.editorial_summary.overview; console.log(place);}
+    if (result.editorial_summary !== undefined && !place.overview) place.overview = result.editorial_summary.overview;
     else if(!place.overview) place.overview = await fetchAiOverview(place);
 
     return place;
@@ -74,17 +73,23 @@ const parseParams = (params)=> {
 const googlePlaceDetailsFields = [ 'formatted_address', 'website', 'opening_hours', 'types', 'photos']
 const googleSearchFields = "name,geometry,editorial_summary,rating"
 
-export const nearbySearch = async (map, formValues, geocode, setCenter, viewDetails, setPlaces, setNextPage) => {
+export const nearbySearch = async (dayPlaces, map, formValues, viewDetails, setPlaces, setNextPage) => {
     // Perform a nearby search.
-    const pyrmont = await new window.google.maps.LatLng(geocode.lat,geocode.lng);
+    const pyrmont = await new window.google.maps.LatLng(formValues.lat,formValues.lng);
     const nearbySearchRequest = { location: pyrmont, ...parseParams(formValues), fields: googleSearchFields};
     const service = await new window.google.maps.places.PlacesService(map);
-    service.nearbySearch(nearbySearchRequest, (results, status, pagination) => {
-
-            if (status !== "OK" || !results) setPlaces([]);
+    await service.nearbySearch(nearbySearchRequest, (results, status, pagination) => {
+        console.log(results);
+        if (status !== "OK" || !results) setPlaces([]);
 
             // create an onClick handler to fetch place details request for each place
             const places = results?.map(place=>{
+                let index = dayPlaces.findIndex(p=>p.place_id === place.place_id);
+                if (index > -1){
+                    place = {...dayPlaces[index]};
+                    place.onClick = () => viewDetails(place);
+                    return place;
+                }
                 const placeDetailsRequest = {
                     placeId: place.place_id,
                     fields: googlePlaceDetailsFields
@@ -97,6 +102,7 @@ export const nearbySearch = async (map, formValues, geocode, setCenter, viewDeta
                                 const placeProcessed = await processResult(place,{});
                                 let newPlace = await processResult(result,placeProcessed);
                                 newPlace = {...placeProcessed, ...newPlace};
+                                newPlace.place_id = place.place_id;
                                 viewDetails(newPlace);
                             }
                         });
@@ -107,9 +113,11 @@ export const nearbySearch = async (map, formValues, geocode, setCenter, viewDeta
                 }
                 return place;
             });
-
             setPlaces(places);
-            setNextPage(pagination);
+            setNextPage({
+                nextPage: ()=>pagination.nextPage(),
+                hasNextPage: pagination.hasNextPage
+            });
         }
     );
 }

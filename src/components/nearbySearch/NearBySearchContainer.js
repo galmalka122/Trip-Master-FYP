@@ -5,7 +5,7 @@ import {Divider} from "primereact/divider";
 import {Sidebar} from "primereact/sidebar";
 import NearbySearchResults from "./NearbySearchResults";
 
-const NearBySearchContainer = ({lat,lng ,map, setCenter, viewDetails}) => {
+const NearBySearchContainer = ({dayPlaces, lat,lng ,map, setCenter, viewDetails}) => {
     const [visible,setVisible] = useState(false);
     const [pagination, setPagination] = useState(null);
     const [places, setPlaces] = useState([]);
@@ -15,10 +15,10 @@ const NearBySearchContainer = ({lat,lng ,map, setCenter, viewDetails}) => {
         <div className="bg-transparent  p-3">
             <Button icon="pi pi-align-justify" text onClick={() => setVisible(true)}/>
             <Sidebar visible={visible} className="hide-overflow" dismissable={false}  modal={false} appendTo={map.getDiv()} onHide={() => setVisible(false)}>
-                <NearBySearch map={map} geocode={{lat,lng}} setCenter={setCenter} viewDetails={viewDetails} setPlaces={setPlaces} setNextPage={setPagination} />
+                <NearBySearch dayPlaces={dayPlaces} map={map} geocode={{lat,lng}} setCenter={setCenter} viewDetails={viewDetails} setPlaces={setPlaces} setNextPage={setPagination} />
                 <Divider />
                 <NearbySearchResults places={places} />
-                <Button ref={loadMorePlaces} onClick={pagination?.nextPage} disabled={!pagination || !pagination?.hasNextPage} >Next</Button>
+                <Button ref={loadMorePlaces} onClick={()=>pagination.nextPage()} disabled={!pagination || !pagination?.hasNextPage} >Next</Button>
             </Sidebar>
         </div>
     );

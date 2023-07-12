@@ -10,6 +10,8 @@ import Unauthorized from "./Unauthorized";
 import useTripContext from "../../core/hooks/useTripContext";
 import Trip from "../trip/Trip";
 import MapContainer from "../map/MapContainer";
+import Day from "../day/Day";
+import PlaceDetailContainer from "../place-details/PlaceDetailContainer";
 
 function AppRoutes() {
     const {  selectedTrip } = useTripContext()
@@ -23,6 +25,7 @@ function AppRoutes() {
             <Route element={<RequireAuth key={"/members"} shouldBeAuthenticated={true}/>}>
                 <Route path="/members/trips" element={<TripList/>} />
                 <Route path="/members/days" element={selectedTrip && <Trip />}/>
+                <Route path="/members/day" element={selectedTrip && <Day />}/>
                 <Route path="/members/search" element={selectedTrip && <MapContainer />}/>
             </Route>
             <Route path="/unauthorized" element={<Unauthorized />} />

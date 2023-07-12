@@ -8,6 +8,7 @@ import {Button} from "primereact/button"
 import { classNames } from 'primereact/utils';
 import { Dialog } from 'primereact/dialog';
 import {AutoComplete} from "primereact/autocomplete";
+import {fetchAiOverview} from "../place-details/placeDetailsUtils";
 
 function NewTripForm(props) {
     const countries = Country.getAllCountries();
@@ -97,7 +98,8 @@ function NewTripForm(props) {
                 longitude: country.longitude
             }
         }
-
+        const overview = await fetchAiOverview(newTrip,false);
+        newTrip.overview = overview;
         await props.handleSubmit(newTrip);
         form.reset()
         setVisible(false)

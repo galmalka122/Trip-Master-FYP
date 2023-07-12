@@ -3,7 +3,7 @@ import {Panel} from "primereact/panel";
 import useTripContext from "../../core/hooks/useTripContext";
 import {GoogleMap} from "@react-google-maps/api";
 import {Dialog} from "primereact/dialog";
-import api from "../../core/api/tripAPI";
+import {getDetails} from "use-places-autocomplete";
 import {Button} from "primereact/button";
 import {useLocation} from "react-router-dom";
 import {useNavigate} from "react-router";
@@ -18,24 +18,28 @@ function MapContainer({ route, navigation }) {
     const toast = useToast();
     const { selectedTrip, addPlaceHandler } = useTripContext();
     const {day} = location.state;
-    const {trip_id, country, city, starting_date, ending_date, lat, lng } = selectedTrip;
+    const {trip_id, country, city, starting_date, ending_date } = selectedTrip;
     const [map,setMap] = useState(null);
     const [selectedPlace,setSelectedPlace] = useState(null);
-    const [center,setCenter] = useState({lat, lng});
+    let latitude = selectedTrip.latitude;
+    let longitude = selectedTrip.longitude;
+    const [center,setCenter] = useState({lat:latitude, lng:longitude});
     const [visible, setVisible] = useState(false);
-
+    console.log(selectedTrip)
     useEffect(()=>{
         selectedPlace && setVisible(true);
     },[selectedPlace])
     const onPlaceClick = async (place)=> {
         setSelectedPlace(place);
+        setCenter({lat:place.latitude, lng:place.longitude});
     }
 
     const onSavePlace = async (details) => {
-        details.date = day.datetime;
+        details.day_index = day.index;
         try {
             const place = await addPlaceHandler(trip_id, details);
             toast.showSuccess("Place " + place.name + " added successfully");
+
         }
         catch (e) {
             console.log(e);
@@ -73,7 +77,7 @@ function MapContainer({ route, navigation }) {
                                 await setMap(map)
                             }
                             }
-                        >{map && <NearBySearchContainer lat={center.lat} lng={center.lng} map={map} setCenter={setCenter} viewDetails={onPlaceClick}/>}
+                        >{map && <NearBySearchContainer dayPlaces={selectedTrip.places[day.index]} lat={center.lat} lng={center.lng} map={map} setCenter={setCenter} viewDetails={onPlaceClick}/>}
                         </GoogleMap></div>
                     <div className="col">
 

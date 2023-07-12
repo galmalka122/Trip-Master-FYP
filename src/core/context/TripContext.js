@@ -92,9 +92,51 @@ export const TripProvider = ({ children }) => {
     const addPlaceHandler = async (tripId, place) => {
         try {
             const addedPlace = await api.addPlace(tripId, place);
+            console.log(addedPlace);
             toast.showSuccess(addedPlace.name, 'Successfully added');
+            selectedTrip.places[place.day_index].push(addedPlace);
+            trips.map((trip) => {
+                    if (trip.trip_id === tripId) {
+                        trip = selectedTrip;
+                    }
+                    return trip;
+                }
+            );
+            loading.off();
+
+            return addedPlace;
         } catch (e) {
             toast.showError(e);
+            loading.off();
+        }
+    }
+
+    const removePlaceHandler = async (tripId, placeId, placeIndex) => {
+        try {
+            const removedPlace = await api.removePlace(tripId, placeId, placeIndex);
+            toast.showSuccess(removedPlace.name, 'Successfully removed');
+            trips.map((trip) => {
+                if (trip.trip_id === tripId) {
+                    trip.places.splice(placeIndex, 1);
+                }
+                return trip;
+            });
+            loading.off();
+            return removedPlace;
+        } catch (e) {
+            toast.showError(e);
+            loading.off();
+        }
+    }
+
+    const calculateRouteHandler = (tripId, dayIndex) => {
+        try{
+            const route = api.calculateRoute(tripId, dayIndex);
+            loading.off();
+            return route;
+        } catch (e) {
+            toast.showError(e);
+            loading.off();
         }
     }
 
@@ -112,7 +154,9 @@ export const TripProvider = ({ children }) => {
         deleteTripHandler,
         selectTrip,
         selectedTrip,
-        addPlaceHandler
+        addPlaceHandler,
+        removePlaceHandler,
+        calculateRouteHandler
     };
 
     // Render the context provider with the provided value

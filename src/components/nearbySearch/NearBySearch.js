@@ -7,10 +7,12 @@ import {Button} from "primereact/button";
 import {googleCategories, nearbySearch as gSearch} from "./googleUtils"
 import {foursquareCategories, nearBySearch as fs}  from "./foursquareUtils";
 import {SelectButton} from "primereact/selectbutton";
+import useFourSquare from "../../core/hooks/useFourSquare";
 
-const NearBySearch = ({map, setCenter, geocode, viewDetails, setPlaces, setNextPage}) => {
-    const googleSearch = async (formValues) => {return await gSearch(map, formValues, geocode, setCenter, viewDetails, setPlaces, setNextPage)};
-    const fsSearch = async(formValues)=> {return await fs(formValues, geocode, setCenter, viewDetails, setPlaces, setNextPage)};
+const NearBySearch = ({dayPlaces, map, geocode, viewDetails, setPlaces, setNextPage}) => {
+    const {axiosFourSquare} = useFourSquare();
+    const googleSearch = async (formValues, dayPlaces) => {return await gSearch(dayPlaces, map, formValues, viewDetails, setPlaces, setNextPage)};
+    const fsSearch = async(formValues, dayPlaces)=> {return await fs(axiosFourSquare, dayPlaces, formValues, viewDetails, setPlaces, setNextPage)};
     const searchEngines = {
         Google: {
             search: googleSearch,
@@ -59,7 +61,10 @@ const NearBySearch = ({map, setCenter, geocode, viewDetails, setPlaces, setNextP
     const formSubmit = async (e)=>{
         e.preventDefault();
         e.stopPropagation();
-        searchEngines[engine].search(formValues, geocode, setCenter, viewDetails, setPlaces, setNextPage);
+        const newFormValues = {...formValues, lat: geocode.lat, lng: geocode.lng}
+
+        const places = await searchEngines[engine].search(newFormValues, dayPlaces);
+        console.log(places);
     }
 
     return (

@@ -1,44 +1,41 @@
-import {axiosFourSquare} from "../../core/api/baseAPI";
+import useFourSquare from "../../core/hooks/useFourSquare";
 import {daysString} from "../trip/utils";
 import {fetchAiOverview} from "../place-details/placeDetailsUtils";
+import {axiosFourSquare} from "../../core/api/baseAPI";
 
 export const foursquareCategories =  [
-    { name: "Restaurant", id: 13387 },
-    { name: "BBQ Joint", id: 13388 },
-    { name: "Bistro", id: 13389 },
-    { name: "Breakfast Spot", id: 13390 },
-    { name: "Buffet", id: 13391 },
-    { name: "Burger Joint", id: 13392 },
-    { name: "Café", id: 13393 },
-    { name: "Diner", id: 13394 },
-    { name: "Hot Dog Joint", id: 13396 },
-    { name: "Mac and Cheese Joint", id: 13397 },
-    { name: "Night Market", id: 13398 },
-    { name: "Pizzeria", id: 13399 },
-    { name: "Bar", id: 13465 },
-    { name: "Beach Bar", id: 13466 },
-    { name: "Beer Garden", id: 13467 },
-    { name: "Champagne Bar", id: 13468 },
-    { name: "Cocktail Bar", id: 13469 },
-    { name: "Dive Bar", id: 13470 },
-    { name: "Hookah Bar", id: 13472 },
-    { name: "Hotel Bar", id: 13473 },
-    { name: "Karaoke Bar", id: 13474 },
-    { name: "Lounge", id: 13475 },
-    { name: "Nightclub", id: 13477 },
-    { name: "Pub", id: 13478 },
-    { name: "Rooftop Bar", id: 13479 },
-    { name: "Speakeasy", id: 13480 },
-    { name: "Sports Bar", id: 13481 },
-    { name: "Wine Bar", id: 13482 },
-    { name: "Cafe", id: 13483 },
-    { name: "Internet Cafe", id: 13484 },
-    { name: "Bubble Tea Shop", id: 13485 },
-    { name: "Coffee Shop", id: 13486 },
-    { name: "Dessert Shop", id: 13487 },
-    { name: "Donut Shop", id: 13488 },
-    { name: "Smoothie Shop", id: 13489 },
-    { name: "Tea House", id: 13490 },
+    { name: "Restaurant", id: 13065 },
+    { name: "BBQ Joint", id: 13026 },
+    { name: "Bistro", id: 13027 },
+    { name: "Breakfast Spot", id: 13028 },
+    { name: "Buffet", id: 13030 },
+    { name: "Burger Joint", id: 13031 },
+    { name: "Café", id: 13034 },
+    { name: "Diner", id: 13049 },
+    { name: "Night Market", id: 13062 },
+    { name: "Pizzeria", id: 13064 },
+    { name: "Bar", id: 13003 },
+    { name: "Beach Bar", id: 13005 },
+    { name: "Beer Garden", id: 13007 },
+    { name: "Champagne Bar", id: 13008 },
+    { name: "Cocktail Bar", id: 13009 },
+    { name: "Dive Bar", id: 13010 },
+    { name: "Hookah Bar", id: 13012 },
+    { name: "Hotel Bar", id: 13013 },
+    { name: "Karaoke Bar", id: 13015 },
+    { name: "Lounge", id: 13016 },
+    { name: "Night club", id: 10032 },
+    { name: "Pub", id: 13018 },
+    { name: "Rooftop Bar", id: 13019 },
+    { name: "Speakeasy", id: 13021 },
+    { name: "Sports Bar", id: 13022 },
+    { name: "Wine Bar", id: 13025 },
+    { name: "Internet Cafe", id: 10020 },
+    { name: "Coffee Shop", id: 13035 },
+    { name: "Dessert Shop", id: 13040 },
+    { name: "Donut Shop", id: 13043 },
+    { name: "Smoothie Shop", id: 13381 },
+    { name: "Tea House", id: 13032 },
     { name: "Landmarks and Outdoors", id: 16000 },
     { name: "Bathing Area", id: 16001 },
     { name: "Bay", id: 16002 },
@@ -124,15 +121,12 @@ export const foursquareCategories =  [
     { name: "Floating Market", id: 17055 },
     { name: "Flower Store", id: 17056 },
     { name: "Food and Beverage Retail", id: 17057 },
-    { name: "Frame Store", id: 17081 },
+    { name: "Framing Store", id: 17081 },
     { name: "Furniture and Home Store", id: 17082 },
     { name: "Gift Store", id: 17089 },
     { name: "Green Grocer", id: 17090 },
-    { name: "Gun Shop", id: 17091 },
     { name: "Hobby Shop", id: 17092 },
-    { name: "Home Improvement Store", id: 17093 },
-    { name: "IT Services", id: 17094 },
-    { name: "Jewelry Store", id: 17095 },
+    { name: "Jewelry Store", id: 17045 },
     { name: "Knitting Store", id: 17096 },
     { name: "Leather Goods Store", id: 17097 },
     { name: "Lingerie Store", id: 17098 },
@@ -178,14 +172,14 @@ const foursquareNearByFields = "name,geocodes,link,location,rating";
 
 const foursquarePlaceDetailsFields = "categories,website,hours,price,photos,description";
 
-const createNearByQuery = (formValues, geocode) => {
+const createNearByQuery = (formValues) => {
     const query = {};
-    query.ll = `${geocode.coords.lat},${geocode.coords.lng}`;
-    query.radius = formValues.radius;
+    query.ll = `${formValues.lat},${formValues.lng}`;
+    query.radius = Math.trunc(formValues.radius * 1000);
     query.limit = 10;
     query.fields = foursquareNearByFields;
     if (formValues.query) query.query = formValues.query;
-    if (formValues.categories) query.categories = formValues.categories;
+    if (formValues.categories) query.categories = formValues.categories.toString();
     if (formValues.max_price){ query.min_price = 1; query.max_price = formValues.max_price;}
     else query.min_price = 1; query.max_price = 4;
 
@@ -227,45 +221,69 @@ function parseLinkHeader(linkHeader) {
     return links;
 }
 
-const processResult = (result) => {
+const processResult = async (result) => {
     const place = {};
     if (result.name) place.name = result.name;
-    if(result.hours) place.openingHours = processHours(result.hours);
+    if(result?.hours?.openingHours) place.openingHours = processHours(result.hours); else place.openingHours = [];
     if(result.price) place.priceLevel = priceMessage[result.price];
-    if(result.categories) place.categories = result.categories.map(category => processCategory(category));
+    if(result.categories) place.types = result.categories.map(category => processCategory(category));
     if (result.photos) {
         place.photos = result.photos.map((photo) => ({
-            urlSmall: `${photo.prefix}200X200${photo.suffix}`,
+            urlSmall: `${photo.prefix}200x200${photo.suffix}`,
             urlLarge: `${photo.prefix}original${photo.suffix}`,
-            attrs: photo.id
+            attrs: [photo.id]
         })).slice(0, 5);
     }
-    if(result.description) place.overview = result.description; else place.overview = fetchAiOverview(place);
     if(result.website) place.website = result.website;
     if(result.location) place.address = result.location.formatted_address;
     return place;
 
 }
+function customRound(number, decimalPlaces) {
+    let factor = Math.pow(10, decimalPlaces);
+    return Math.floor(number * factor) / factor;
+}
 
-export const nearBySearch = async (formValues, geocode, setCenter, viewDetails, setPlaces, setNextPage) => {
-    const params = createNearByQuery(formValues, geocode);
-    const searchParams = new URLSearchParams(params);
-    const url = `v3/places/search?${searchParams}`;
+export const nearBySearch = async (api, dayPlaces, formValues, viewDetails, setPlaces, setNextPage, next=null) => {
+    let url;
+    if(!next) {
+        const params = createNearByQuery(formValues);
+        const searchParams = new URLSearchParams(params);
+        url = `v3/places/search?${searchParams}`;
+    }
+    else url = next;
     try {
-        const {data, headers} = await axiosFourSquare.get(url);
+        const {data, headers} = await api.get(url);
         const results = data.results;
         const places = results.map(place => {
-            place.coords = {lat: place.geocodes.main.latitude, lng: place.geocodes.main.longitude};
+            const index = dayPlaces.findIndex(dayPlace => dayPlace.id === place.id);
+            if(index !== -1) return dayPlaces[index];
+            place.latitude = place.geocodes.main.latitude;
+            place.longitude = place.geocodes.main.longitude;
             place.onClick = async () => {
-                const {data} = await axiosFourSquare.get(`${place.link}?fields=${foursquarePlaceDetailsFields}`);
-                const placeDetails = {...processResult({...place, ...data})};
-                setCenter({lat: place.coords.lat, lng: place.coords.lng});
+                const {data} = await api.get(`${place.link}?fields=${foursquarePlaceDetailsFields}`);
+                let placeDetails = await processResult(data);
+                placeDetails = {...placeDetails, ...place};
+                if(placeDetails.description) placeDetails.overview = placeDetails.description;
+                else placeDetails.overview = await fetchAiOverview(placeDetails);
                 viewDetails(placeDetails);
             }
+            place?.rating ? place.rating = customRound(place.rating / 2, 1) : place.rating = 0;
+            return place;
         });
         setPlaces(places);
-        setNextPage({next: parseLinkHeader(headers.link),
-            hasNextPage: headers?.link?.includes('rel="next"')});
+        const hasNext = headers?.link?.includes('rel="next"');
+        if(!hasNext) {
+            setNextPage({nextPage: null, hasNextPage: false});
+            return;
+        }
+
+        const next = new URL(parseLinkHeader(headers.link).next);
+        const link = next.pathname + next.search;
+        setNextPage({nextPage: async () => {
+            await nearBySearch(api, dayPlaces, null, viewDetails, setPlaces, setNextPage, link)
+            },
+            hasNextPage: hasNext});
     }
     catch (e) {
         throw new Error("Error in fetching places");

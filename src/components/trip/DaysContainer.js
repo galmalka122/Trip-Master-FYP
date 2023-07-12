@@ -11,7 +11,7 @@ const DaysContainer = ({tripDays, lat, lng}) => {
         if (!day) {
             return;
         }
-        return <TripDay day={day} onClick={() => navigate("/members/search",{state:{day: day}})}/>;
+        return <TripDay day={day} onClick={() => navigate("/members/day",{state:{day: day}})}/>;
     };
 
     return (
