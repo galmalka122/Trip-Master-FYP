@@ -1,0 +1,113 @@
+.App {
+  text-align: center;
+}
+
+.page-loader-show {
+  opacity: 1;
+}
+
+.carousel-container {
+  display: -webkit-inline-flex;
+  width: 500px; /* Set a fixed width */
+  height: 300px; /* Set a fixed height */
+}
+
+.uniform-image {
+  width: 500px; /* Set the desired width */
+  height: 300px; /* Set the desired height */
+  object-fit: cover; /* Adjust how the image fills its container */
+}
+
+.image{
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.15);
+}
+
+.page-loader__spinner {
+  position: relative;
+  width: 100px;
+  height: 100px;
+}
+
+#map {
+  height: 60vh;
+  width: 100%
+}
+
+.icon {
+  color: #ffb526;
+}
+
+.tada {
+  -webkit-animation-name: tada;
+  animation-name: tada;
+}
+
+.animated {
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
+
+.fa {
+  display: inline-block;
+  font: normal normal normal 14px/1 FontAwesome;
+  font-size: inherit;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+span.navbar-text{
+  padding-right: 1em;
+}
+
+.spinner {
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-top: 4px solid #007bff;
+  animation: spin 3s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.opacity-blur{
+  opacity: 0.5;
+}
