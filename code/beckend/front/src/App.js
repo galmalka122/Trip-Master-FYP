@@ -1,15 +1,21 @@
 import React from "react";
-import './App.css';
-import {BrowserRouter as Router} from "react-router-dom";
-import 'bootstrap/dist/css/bootstrap.css';
-import AppRoutes from "./components/routes/AppRoutes";
-import Navigation from "./components/routes/Navigation";
 import {useState} from "react";
 import {useLoadScript} from "@react-google-maps/api";
+
+import {BrowserRouter as Router} from "react-router-dom";
 import { PrimeReactProvider } from 'primereact/api';
 
+import AppRoutes from "./components/routes/AppRoutes";
+import Navigation from "./components/routes/Navigation";
 
-function App({ pageProps }) {
+import './App.css';
+import 'bootstrap/dist/css/bootstrap.css';
+
+
+function App({ pageProps }) 
+{
+
+    // Initialize the google api.
     const [ libraries ] = useState(['places', 'routes', "geometry", "marker"]);
     const { isLoaded } = useLoadScript({
         googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,

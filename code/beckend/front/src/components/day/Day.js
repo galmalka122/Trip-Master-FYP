@@ -37,6 +37,7 @@ const Day = () => {
     const [destination, setDestination] = useState(null);
     const [differentDestination, setDifferentDestination] = useState(false);
     const t = new Date()
+    
     // eslint-disable-next-line no-unused-vars
     const [startingTime, setStartingTime] = useState("16:45");
     const [endingTime, setEndingTime] = useState(null);

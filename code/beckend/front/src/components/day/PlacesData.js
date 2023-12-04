@@ -1,16 +1,22 @@
 import React, {useState} from 'react';
-import {Button} from "primereact/button";
-import DeleteTripButton from "../trip/DeleteTripButton";
-import useTripContext from "../../core/hooks/useTripContext";
-import moment from "moment";
+
 import {Dropdown} from "primereact/dropdown";
 import {Calendar} from "primereact/calendar";
-import {hoursLimit} from "./utils";
+import {Button} from "primereact/button";
 import {DataTable} from "primereact/datatable";
 import {Column} from "primereact/column";
 
-const PlacesData = ({onSelectPlace, day, places, setPlaces, placesStates, setPlacesStates}) => {
+import DeleteTripButton from "../trip/DeleteTripButton";
+import useTripContext from "../../core/hooks/useTripContext";
+
+import moment from "moment";
+import {hoursLimit} from "./utils";
+
+const PlacesData = ({onSelectPlace, day, places, setPlaces, placesStates, setPlacesStates}) => 
+{
+
     const { selectedTrip, removePlaceHandler } = useTripContext();
+
     const onPlaceStateChange = (index, name, value) => {
         const newStates = [...placesStates];
         newStates[index][name] = value;
@@ -21,6 +27,7 @@ const PlacesData = ({onSelectPlace, day, places, setPlaces, placesStates, setPla
     const dayDate = moment(day.datetime, "MM-DD-YYYY").day();
     const dayIndex = dayDate % 7;
 
+    
     const openingHoursTemplate = (rowData) => {
         return rowData?.openingHours[dayIndex].openingHours.map((hours) => {
             return (
